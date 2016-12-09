@@ -1,0 +1,14 @@
+{
+  "name": "obddashboard",
+  "version": "0.0.1",
+  "description": "Frontend for OBDDashboard app",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Robert Wesołowski",
+  "license": "ISC",
+  "devDependencies": {
+    "gulp": "^3.9.1"
+  }
+}
