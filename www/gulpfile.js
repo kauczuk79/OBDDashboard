@@ -1,24 +1,29 @@
-var gulp = require('gulp');
+var gulp = require('gulp'),
+    concat = require('gulp-concat'),
+    sourcemaps = require('gulp-sourcemaps'),
+    uglify = require('gulp-uglify'),
+    clean = require('gulp-clean'),
+    gulpSequence = require('gulp-sequence');
 
-gulp.task('default', [
+gulp.task('default', gulpSequence(
     'compile',
     'concatenate',
     'minify'
-]);
+));
 
-gulp.task('compile', [
+gulp.task('compile', gulpSequence([
     'compile:style'
-]);
+]));
 
-gulp.task('concatenate', [
+gulp.task('concatenate', gulpSequence([
     'concatenate:js',
     'concatenate:style'
-])
+]));
 
-gulp.task('minify', [
+gulp.task('minify', gulpSequence([
     'minify:js',
     'minify:style'
-]);
+]));
 
 gulp.task('compile:style', function () {
     console.log('Compile Styles');
@@ -26,6 +31,11 @@ gulp.task('compile:style', function () {
 
 gulp.task('concatenate:js', function () {
     console.log('Concatenate JavaScript');
+    gulp.src('./src/js/*.js')
+        .pipe(sourcemaps.init())
+        .pipe(concat('app.js'))
+        .pipe(sourcemaps.write())
+        .pipe(gulp.dest('./js'));
 });
 
 gulp.task('concatenate:style', function () {
@@ -34,6 +44,10 @@ gulp.task('concatenate:style', function () {
 
 gulp.task('minify:js', function () {
     console.log('Minify JavaScript');
+//    TODO
+//    gulp.src('./temp/app.js')
+//        .pipe(uglify())
+//        .pipe(gulp.dest('./js'));
 });
 
 gulp.task('minify:style', function () {
