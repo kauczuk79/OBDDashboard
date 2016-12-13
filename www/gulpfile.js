@@ -44,10 +44,13 @@ gulp.task('concatenate:style', function () {
 
 gulp.task('minify:js', function () {
     console.log('Minify JavaScript');
-//    TODO
-//    gulp.src('./temp/app.js')
-//        .pipe(uglify())
-//        .pipe(gulp.dest('./js'));
+    //    TODO
+    gulp.src('./temp/app.js')
+        .pipe(uglify())
+        .pipe(gulp.dest('./js'))
+        .on('error', function (err) {
+            console.error('Error in compress task', err.toString());
+        });
 });
 
 gulp.task('minify:style', function () {
