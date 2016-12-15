@@ -3,9 +3,11 @@ var gulp = require('gulp'),
     sourcemaps = require('gulp-sourcemaps'),
     uglify = require('gulp-uglify'),
     clean = require('gulp-clean'),
-    gulpSequence = require('gulp-sequence');
+    gulpSequence = require('gulp-sequence'),
+    rename = require('gulp-rename');
 
 gulp.task('default', gulpSequence(
+    'clean',
     'compile',
     'concatenate',
     'minify'
@@ -16,14 +18,17 @@ gulp.task('compile', gulpSequence([
 ]));
 
 gulp.task('concatenate', gulpSequence([
-    'concatenate:js',
-    'concatenate:style'
+    'concatenate:js'
 ]));
 
 gulp.task('minify', gulpSequence([
-    'minify:js',
-    'minify:style'
+    'minify:js'
 ]));
+
+gulp.task('clean', function () {
+    return gulp.src(['./js/app.*'], {read:false})
+        .pipe(clean());
+});
 
 gulp.task('compile:style', function () {
     console.log('Compile Styles');
@@ -31,7 +36,7 @@ gulp.task('compile:style', function () {
 
 gulp.task('concatenate:js', function () {
     console.log('Concatenate JavaScript');
-    gulp.src('./src/js/*.js')
+    return gulp.src('./src/js/**/*.js')
         .pipe(sourcemaps.init())
         .pipe(concat('app.js'))
         .pipe(sourcemaps.write())
@@ -44,13 +49,10 @@ gulp.task('concatenate:style', function () {
 
 gulp.task('minify:js', function () {
     console.log('Minify JavaScript');
-    //    TODO
-    gulp.src('./temp/app.js')
+    return gulp.src(['./js/app.js'])
         .pipe(uglify())
-        .pipe(gulp.dest('./js'))
-        .on('error', function (err) {
-            console.error('Error in compress task', err.toString());
-        });
+        .pipe(rename({ suffix: '.min' }))
+        .pipe(gulp.dest('./js'));
 });
 
 gulp.task('minify:style', function () {
