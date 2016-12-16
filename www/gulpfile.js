@@ -1,10 +1,12 @@
 var gulp = require('gulp'),
-    concat = require('gulp-concat'),
-    sourcemaps = require('gulp-sourcemaps'),
-    uglify = require('gulp-uglify'),
     clean = require('gulp-clean'),
+    cleanCss = require('gulp-clean-css'),
+    concat = require('gulp-concat'),
+    concatCss = require('gulp-concat-css'),
+    rename = require('gulp-rename'),
     gulpSequence = require('gulp-sequence'),
-    rename = require('gulp-rename');
+    sourcemaps = require('gulp-sourcemaps'),
+    uglify = require('gulp-uglify');
 
 gulp.task('default', gulpSequence(
     'clean',
@@ -18,15 +20,17 @@ gulp.task('compile', gulpSequence([
 ]));
 
 gulp.task('concatenate', gulpSequence([
-    'concatenate:js'
+    'concatenate:js',
+    'concatenate:style'
 ]));
 
 gulp.task('minify', gulpSequence([
-    'minify:js'
+    'minify:js',
+    'minify:style'
 ]));
 
 gulp.task('clean', function () {
-    return gulp.src(['./js/app.*'], {read:false})
+    return gulp.src(['./js/app.*', './css/app.*'], {read:false})
         .pipe(clean());
 });
 
@@ -45,6 +49,9 @@ gulp.task('concatenate:js', function () {
 
 gulp.task('concatenate:style', function () {
     console.log('Concatenate Styles');
+    return gulp.src('./src/css/**/*.css')
+        .pipe(concatCss('/app.css'))
+        .pipe(gulp.dest('./css'));
 });
 
 gulp.task('minify:js', function () {
@@ -57,4 +64,8 @@ gulp.task('minify:js', function () {
 
 gulp.task('minify:style', function () {
     console.log('Minify Styles');
+    return gulp.src('./css/app.css')
+        .pipe(cleanCss())
+        .pipe(rename({ suffix: '.min' }))
+        .pipe(gulp.dest('./css'));
 });
