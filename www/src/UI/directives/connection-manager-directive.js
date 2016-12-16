@@ -11,9 +11,5 @@
                 controllerAs: 'connectionManagerCtrl',
                 bindToController: true
             };
-        }])
-        .controller('connectionManagerController', [function connectionManagerController() {
-            console.log('Run connectionManagerController');
-            var vm = this;
         }]);
 }());
