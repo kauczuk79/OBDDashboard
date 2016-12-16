@@ -14,6 +14,7 @@ gulp.task('default', gulpSequence(
     'compile',
     'concatenate',
     'minify',
+    'copyDeps',
     'clean:post'
 ));
 
@@ -31,8 +32,28 @@ gulp.task('minify', gulpSequence([
     'minify:style'
 ]));
 
+gulp.task('copyDeps', gulpSequence([
+    'copyDeps:js',
+    'copyDeps:styles'
+]));
+
+gulp.task('copyDeps:js', function () {
+    return gulp.src([
+            './node_modules/angular/angular.js',
+            './node_modules/angular/angular.min.js'
+        ])
+        .pipe(gulp.dest('./js/deps'));
+});
+
+gulp.task('copyDeps:styles', function () {
+    return gulp.src([
+            './node_modules/angular/angular-csp.css'
+        ])
+        .pipe(gulp.dest('./css/deps'));
+});
+
 gulp.task('clean:pre', function () {
-    return gulp.src(['./js/app.*', './css/app.*'], {read:false})
+    return gulp.src(['./js/app.*', './js/deps', './css/app.*', './css/deps'], {read:false})
         .pipe(clean());
 });
 

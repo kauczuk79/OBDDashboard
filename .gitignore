@@ -42,4 +42,6 @@ plugins
 
 #gulp generated files
 www/css/app.*
+www/css/deps
 www/js/app.*
+www/js/deps
