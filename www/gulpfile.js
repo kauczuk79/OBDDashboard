@@ -4,15 +4,17 @@ var gulp = require('gulp'),
     concat = require('gulp-concat'),
     concatCss = require('gulp-concat-css'),
     rename = require('gulp-rename'),
+    sass = require('gulp-sass'),
     gulpSequence = require('gulp-sequence'),
     sourcemaps = require('gulp-sourcemaps'),
     uglify = require('gulp-uglify');
 
 gulp.task('default', gulpSequence(
-    'clean',
+    'clean:pre',
     'compile',
     'concatenate',
-    'minify'
+    'minify',
+    'clean:post'
 ));
 
 gulp.task('compile', gulpSequence([
@@ -29,27 +31,37 @@ gulp.task('minify', gulpSequence([
     'minify:style'
 ]));
 
-gulp.task('clean', function () {
+gulp.task('clean:pre', function () {
     return gulp.src(['./js/app.*', './css/app.*'], {read:false})
+        .pipe(clean());
+});
+
+gulp.task('clean:post', function () {
+    return gulp.src(['./src/temp'], {read: false})
         .pipe(clean());
 });
 
 gulp.task('compile:style', function () {
     console.log('Compile Styles');
+    return gulp.src(['./src/**/*.scss'])
+        .pipe(sass.sync().on('error', function (err) {
+            console.log(err);
+        }))
+        .pipe(gulp.dest('./src/temp'));
 });
 
 gulp.task('concatenate:js', function () {
     console.log('Concatenate JavaScript');
-    return gulp.src('./src/js/**/*.js')
-        .pipe(sourcemaps.init())
+    return gulp.src('./src/**/*.js')
+        //.pipe(sourcemaps.init())
         .pipe(concat('app.js'))
-        .pipe(sourcemaps.write())
+        //.pipe(sourcemaps.write())
         .pipe(gulp.dest('./js'));
 });
 
 gulp.task('concatenate:style', function () {
     console.log('Concatenate Styles');
-    return gulp.src('./src/css/**/*.css')
+    return gulp.src('./src/temp/**/*.css')
         .pipe(concatCss('/app.css'))
         .pipe(gulp.dest('./css'));
 });

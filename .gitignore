@@ -39,3 +39,7 @@ jspm_packages
 #Cordova stuff
 platforms
 plugins
+
+#gulp generated files
+www/css/app.*
+www/js/app.*
