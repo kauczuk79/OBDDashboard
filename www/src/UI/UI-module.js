@@ -1,4 +1,6 @@
 (function () {
     'use strict';
-    angular.module('OBDDashboardApp.UI', []);
+    angular.module('OBDDashboardApp.UI', [
+        'OBDDashboardApp.UI.directives'
+    ]);
 }());

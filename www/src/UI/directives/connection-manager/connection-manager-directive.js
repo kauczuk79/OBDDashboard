@@ -1,7 +1,7 @@
 (function () {
     'use strict';
     angular
-        .module('OBDDashboardApp.UI')
+        .module('OBDDashboardApp.UI.directives')
         .directive('connectionManager', [function connectionManager() {
             console.log('Directive connectionManager');
             return {
